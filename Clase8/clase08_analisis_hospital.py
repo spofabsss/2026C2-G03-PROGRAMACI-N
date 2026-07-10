@@ -7,7 +7,7 @@ simples.
 
 import json
 
-ARCHIVO_DATOS = "datos_clinica.json"
+ARCHIVO_DATOS = "Clase8/datos_clinica.json"
 
 
 def calcular_promedio(suma, cantidad):
@@ -23,9 +23,11 @@ def es_adulto_mayor(edad):
 # REQUERIMIENTO 1:
 # Construya aqui la lectura del JSON con el docente.
 # Al terminar, la variable pacientes debe tener 15 registros.
-pacientes = []
-
-
+with open (ARCHIVO_DATOS,"r",encoding = "utf-8") as archivo:
+    pacientes = json.load(archivo)
+    
+    print("TIPO:", type(pacientes))
+    print("TIPO PRIMER PACIENTE:", type(pacientes[0]))
 # 2. Exploracion inicial
 print("Cantidad de pacientes:", len(pacientes))
 
@@ -33,12 +35,16 @@ if len(pacientes) == 0:
     print("Primero construya con el docente la lectura del JSON.")
     print("Cuando cargue correctamente, debe mostrar 15 pacientes.")
 else:
+    primer_paciente = pacientes[0]
+    print ("Datos de paciente:", primer_paciente.keys())
+    print("Primer paciente:", primer_paciente["nombre"])
     # REQUERIMIENTO 2:
-    # Explore el primer paciente y muestre sus llaves y valores.
+    # Explore el primer paciente y muestre sus llaves y valores
+    
 
     # Variables acumuladoras del analisis.  suma_edades, conteo_san_jose, 
     # conteo_mujeres, conteo_hombres y adultos_mayores.
- 
+
 
     # 4. Ciclo principal
     # Cada vuelta del ciclo representa un paciente del JSON.
