@@ -50,3 +50,14 @@ def resumir_por_tipo_entidad(datos):
     # TODO 7: agrupe por TIPO, calcule el promedio de COMPRA, VENTA y
     # DIFERENCIAL, redondee y ordene por DIFERENCIAL.
     return pd.DataFrame()
+
+ promedio_diferencial = datos["DIFERENCIAL"].mean()
+            print(f"El promedio del diferencial es: {promedio_diferencial:.2f}")
+            #Agrupa por TIPO, calcula el promedio de COMPRA, VENTA Y DIFERENCIAL, redondee y 
+            
+            columnas= ["COMPRA", "VENTA ", "DIFERENCIAL"]
+        print(
+            datos.groupby ("TIPO")[columnas]
+                .mean()
+                .round(2)
+                .sort_values("DIFERENCIAL", ascending=False)

@@ -27,3 +27,12 @@ def mostrar_top_10 (datos: pd.DataFrame):
     top_10 =datos [seleccion].head (10).to_string (index=False)
     return top_10
 
+
+
+
+
+
+
+
+
+

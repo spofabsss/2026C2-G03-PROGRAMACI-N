@@ -1,7 +1,7 @@
 """Programa principal del proyecto modular BCCR."""
 
 from lectura_datos import cargar_tabla_bccr, mostrar_top_10 
-from limpieza_datos import limpiar_datos
+from limpieza_datos import filtrar_diferencial_alto, limpiar_datos
 
 def ejecutar (): 
     """Cargar los datos y presentar el menu del sistema"""
@@ -27,20 +27,12 @@ if __name__ == "__main__":
             
             print(mostrar_top_10(datos))
         elif opcion == "2":
-            promedio_diferencial = datos["DIFERENCIAL"].mean()
-            print(f"El promedio del diferencial es: {promedio_diferencial:.2f}")
-            #Agrupa por TIPO, calcula el promedio de COMPRA, VENTA Y DIFERENCIAL, redondee y 
             
-            columnas= ["COMPRA", "VENTA ", "DIFERENCIAL"]
-        print(
-            datos.groupby ("TIPO")[columnas]
-                .mean()
-                .round(2)
-                .sort_values("DIFERENCIAL", ascending=False)
-        )
         
         elif opcion == "3":
-            pass
+        print("Entidades con diferencial mayor al promedio:")
+            entidades_altas = filtrar_diferencial_alto(datos)
+            print(mostrar_top_10(entidades_altas))
         elif opcion == "4":
             pass
         elif opcion == "5":
