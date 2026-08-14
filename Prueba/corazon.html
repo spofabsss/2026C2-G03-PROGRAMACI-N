@@ -1,0 +1,176 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Motion Pink Heart</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="c"></canvas>
+
+    <script>
+        const canvas = document.getElementById("c");
+        const ctx = canvas.getContext("2d");
+
+        let W, H, CX, CY, SCALE;
+
+        const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+        const text = "I love you";
+        const points = [];
+
+        const TOTAL = 95;
+
+        function resize() {
+            W = window.innerWidth;
+            H = window.innerHeight;
+
+            canvas.width = W * DPR;
+            canvas.height = H * DPR;
+
+            canvas.style.width = W + "px";
+            canvas.style.height = H + "px";
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(DPR, DPR);
+
+            CX = W / 2;
+            CY = H / 2 + 20;
+
+            SCALE = Math.min(W, H) * 0.014;
+
+            buildPoints();
+        }
+
+        // Ecuación clásica del corazón
+        function heart(t) {
+            const x = 16 * Math.pow(Math.sin(t), 3);
+
+            const y =
+                13 * Math.cos(t)
+                - 5 * Math.cos(2 * t)
+                - 2 * Math.cos(3 * t)
+                - Math.cos(4 * t);
+
+            return {
+                x: x * SCALE,
+                y: -y * SCALE
+            };
+        }
+
+        function buildPoints() {
+            points.length = 0;
+
+            for (let i = 0; i < TOTAL; i++) {
+                const t = (i / TOTAL) * Math.PI * 2;
+
+                points.push({
+                    baseT: t,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function glowText(txt, x, y, angle, size, alpha = 1) {
+            ctx.save();
+
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+
+            ctx.font = `bold ${size}px Arial, sans-serif`;
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            // Brillo
+            ctx.shadowColor = "rgba(255, 120, 190, 0.95)";
+            ctx.shadowBlur = 12;
+
+            ctx.fillStyle = `rgba(255, 150, 210, ${alpha})`;
+
+            ctx.fillText(txt, 0, 0);
+
+            ctx.restore();
+        }
+
+        function animate(time) {
+            ctx.clearRect(0, 0, W, H);
+
+            const slowTime = time * 0.001;
+
+            // Pequeño brillo del corazón
+            const pulse = 1 + Math.sin(slowTime * 2) * 0.025;
+
+            ctx.save();
+
+            ctx.translate(CX, CY);
+            ctx.scale(pulse, pulse);
+
+            // Dibujar los "I love you"
+            points.forEach((p, i) => {
+
+                const t = p.baseT + slowTime * 0.15;
+
+                const pos = heart(t);
+
+                const angle = Math.atan2(
+                    heart(t + 0.01).y - heart(t - 0.01).y,
+                    heart(t + 0.01).x - heart(t - 0.01).x
+                );
+
+                const size = Math.max(10, Math.min(W, H) * 0.018);
+
+                glowText(
+                    text,
+                    pos.x,
+                    pos.y,
+                    angle,
+                    size,
+                    0.75 + Math.sin(slowTime * 2 + p.phase) * 0.25
+                );
+            });
+
+            ctx.restore();
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener("resize", resize);
+
+        resize();
+
+        requestAnimationFrame(animate);
+    </script>
+
+</body>
+
+</html>
+```
